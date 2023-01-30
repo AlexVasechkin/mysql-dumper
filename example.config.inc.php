@@ -1,6 +1,6 @@
 <?php
 
-$mysqldumpDir = '/usr/bin/';
+$mysqlbinDir = '/usr/bin/';
 
 $ddlDir = './ddl';
 $dataDir = './data';
