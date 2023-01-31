@@ -9,4 +9,8 @@ $config = [
         'port' => '3306',
         'options' => []
     ],
+    'exclude' => [
+        'some_table'
+    ],
+    'start_from' => 'another_one_table'
 ];

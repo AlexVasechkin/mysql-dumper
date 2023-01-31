@@ -29,8 +29,27 @@ foreach ($ddlFileList as $fileName) {
 
 $dataFileList = scandir($dataDir);
 (!is_array($dataFileList) && ($dataFileList = []));
+$exceptions = array_map(function ($table) { return $table . '.sql'; }, $config['exclude']);
+$dataFileList = array_diff($dataFileList, $exceptions);
+sort($dataFileList, SORT_NATURAL | SORT_FLAG_CASE);
+
+if (is_string($config['start_from'])) {
+    $index = null;
+    for ($i = 0; $i < count($dataFileList); $i++) {
+        if ($dataFileList[$i] === ($config['start_from'] . '.sql')) {
+            $index = $i;
+            break;
+        }
+    }
+
+    if ($index) {
+        $dataFileList = array_slice($dataFileList, $index);
+    }
+}
+
 foreach ($dataFileList as $fileName) {
     try {
+        echo sprintf('started: %s', $fileName) . PHP_EOL;
         system(sprintf($mysqlbinDir . 'mysql --host=%s --port=%s --user=%s -p%s %s < %s',
             $config['db']['host'],
             $config['db']['port'],
